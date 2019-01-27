@@ -1,6 +1,8 @@
 package main
 
-import "testing"
+import (
+	"testing"
+)
 
 func TestStockAdd(t *testing.T) {
 
@@ -28,4 +30,47 @@ func TestStockAdd(t *testing.T) {
 	if items.Type != "Veg" {
 		t.Error("Should be Veg")
 	}
+}
+
+func TestRemoveItem(t *testing.T) {
+	stock := &Stock{}
+
+	item := Item{
+		Code:  "A1",
+		Name:  "Kale",
+		Price: 420,
+		Type:  "Veg",
+		Level: 10,
+	}
+	stock.Add(item)
+
+	stock.RemoveItem(item) // should remove one item
+	if stock.items[item.Code].Level != 9 {
+		t.Error("Item.Level should be at 9")
+	}
+}
+
+func TestSellOut(t *testing.T) {
+	stock := &Stock{}
+
+	item := Item{
+		Code:  "A1",
+		Name:  "Kale",
+		Price: 420,
+		Type:  "Veg",
+		Level: 1,
+	}
+	stock.Add(item)
+	stock.RemoveItem(item) // should remove one item
+
+	_, soldout := stock.soldOut[item.Code]
+	if !soldout {
+		t.Error("Key shouldn't exist anymore")
+	}
+
+	_, instock := stock.items[item.Code]
+	if instock {
+		t.Error("Key shouldn't exist anymore")
+	}
+
 }
