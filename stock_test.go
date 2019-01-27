@@ -74,3 +74,39 @@ func TestSellOut(t *testing.T) {
 	}
 
 }
+
+func TestReStock(t *testing.T) {
+	stock := &Stock{}
+
+	item := Item{
+		Code:  "A1",
+		Name:  "Kale",
+		Price: 420,
+		Type:  "Veg",
+		Level: 1,
+	}
+	stock.Add(item)
+	stock.RemoveItem(item) // should remove one item
+
+	_, soldout := stock.soldOut[item.Code]
+	if !soldout {
+		t.Error("Key shouldn't exist anymore")
+	}
+
+	_, instock := stock.items[item.Code]
+	if instock {
+		t.Error("Key shouldn't exist anymore")
+	}
+
+	stock.Add(item)
+	stock.Add(item)
+
+	if stock.items[item.Code].Level != 2 {
+		t.Error("Stock level should be 2")
+	}
+
+	_, recheck := stock.soldOut[item.Code]
+	if recheck {
+		t.Error("Item should be in stock")
+	}
+}

@@ -1,9 +1,5 @@
 package main
 
-import (
-	"fmt"
-)
-
 // Stock ...
 type Stock struct {
 	items   StockItems
@@ -15,7 +11,15 @@ func (s *Stock) Add(item Item) {
 	if s.items == nil {
 		s.items = make(StockItems)
 	}
-	s.items[item.Code] = item
+
+	_, found := s.items[item.Code]
+	if found {
+		restock := s.items[item.Code]
+		restock.Level += item.Level
+		s.items[item.Code] = restock
+	} else {
+		s.items[item.Code] = item
+	}
 
 	_, exists := s.soldOut[item.Code]
 	if exists {
@@ -31,7 +35,6 @@ func (s *Stock) RemoveItem(item Item) {
 	s.items[item.Code] = temp
 
 	if s.items[item.Code].Level == 0 {
-		fmt.Println("item sold out")
 		s.MoveToSoldOut(item)
 	}
 }
@@ -44,11 +47,6 @@ func (s *Stock) MoveToSoldOut(item Item) {
 	}
 	s.soldOut[item.Code] = item
 	delete(s.items, item.Code)
-}
-
-// DumpList ...
-func (s *Stock) DumpList() {
-	fmt.Println(s.items)
 }
 
 // StockItems ...

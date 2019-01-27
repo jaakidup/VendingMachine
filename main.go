@@ -1,7 +1,7 @@
 package main
 
 func main() {
-	vm := NewVM()
+	vm := NewVM("My Shop System")
 	vm.ShowMessage("Hello")
 
 	// vm.dispenser.AddItem(Item{"Coke", 1000})

@@ -4,7 +4,7 @@ import "testing"
 
 func TestVendingMachine(t *testing.T) {
 
-	vm := NewVM()
+	vm := NewVM("Test VendingMachine")
 	vm.ShowMessage("Hello")
 
 	vm.SetNeededAmount(1000)
